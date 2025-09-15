@@ -1,35 +1,30 @@
 package main
 
 import (
-	"firefly-home-assigment/configs"
-	"firefly-home-assigment/internal/readers"
+	"firefly-home-assigment/internal/extractors"
+	"firefly-home-assigment/internal/outputs"
+	"firefly-home-assigment/internal/sorts"
 	"log"
-	"sync"
+	"runtime/debug"
 )
 
+func init() {
+	// Global panic recovery to log stack trace
+	defer func() {
+		if err := recover(); err != nil {
+			log.Fatal("Panic occurred: ", err, ", Trace: ", string(debug.Stack()))
+		}
+	}()
+}
+
 func main() {
-	var err error
-	r := readers.HTTPReader{
-		readers.Reader{
-			Channel: make(chan string, 3),
-			Result:  make(map[string]string),
-			Wg:      &sync.WaitGroup{},
-			Path:    configs.Env("BANK_OF_WORDS_URL", ""),
-		},
-	}
-
-	err = r.Read()
-	//x := readers.FileReader{
-	//	readers.Reader{
-	//		Channel: make(chan string, 3),
-	//		Result:  make(map[string]string),
-	//		Wg:      &sync.WaitGroup{},
-	//		Path:    "/home/galb/GolandProjects/firefly-home-assignment/endg-urls",
-	//	},
-	//}
-	//err = x.Read()
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	// Extract words bank
+	wordsBank := extractors.NewWordsBank()
+	wordsBank.Extract()
+	// Extract essays and count words
+	essays := extractors.NewEssay(wordsBank.Result)
+	essays.Extract()
+	// Sort and output results
+	output := &outputs.JSONOutput{Output: outputs.Output{Data: sorts.SortByFrequency(essays.Result)}}
+	output.Print()
 }

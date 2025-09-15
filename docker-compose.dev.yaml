@@ -1,0 +1,10 @@
+services:
+  app:
+    container_name: app
+    build:
+      context: .
+      target: dev-builder
+    volumes:
+      - .:/firefly/app
+    env_file:
+      - .env

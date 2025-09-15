@@ -1,0 +1,8 @@
+services:
+  app:
+    container_name: app
+    build:
+      context: .
+      target: prod-builder
+    env_file:
+      - .env

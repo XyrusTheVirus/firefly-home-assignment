@@ -1,7 +1,7 @@
 package readers
 
 import (
-	"firefly-home-assigment/configs"
+	"fmt"
 	"os"
 )
 
@@ -9,26 +9,17 @@ type FileReader struct {
 	Reader
 }
 
+// Read opens the file at the specified path and processes it in chunks
 func (r FileReader) Read() error {
 	var err error
 	var file *os.File
 
 	file, err = os.Open(r.Path)
 	if err != nil {
-		return err
+		panic(fmt.Sprintf("Couldn't open file: %s", err.Error())) // Panic here as this is a critical error
 	}
 
 	defer file.Close()
-	info, err := file.Stat()
-	if err != nil {
-		return err
-	}
-	numOfChunks := int(info.Size()) / configs.EnvInt("CHUNK_SIZE", "4096")
-	r.Wg.Add(numOfChunks)
-	go func() {
-		defer r.Wg.Done()
-		err = r.ChunkProcessor(file)
-	}()
-	r.Wg.Wait()
+	err = r.ChunkProcessor(file)
 	return err
 }
