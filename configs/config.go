@@ -27,8 +27,10 @@ func loadEnv() {
 
 // Env returns the value of the key in the .env file
 func Env(key string, fallback string) string {
+	// Load .env file only once
 	if !envLoaded {
 		configMutex.Lock()
+		// Double-check locking
 		if !envLoaded {
 			loadEnv()
 		}

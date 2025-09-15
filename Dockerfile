@@ -5,10 +5,10 @@ WORKDIR /firefly/app
 # cache deps
 COPY go.mod go.sum ./
 RUN go mod download
-RUN mv .env.example .env
 
 # copy sources
 COPY . ./
+RUN mv .env.example .env
 
 # Set GOBIN to a safe place for the binary
 ENV GOBIN=/firefly/app/bin
