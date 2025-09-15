@@ -51,27 +51,27 @@ There are 3 ways to run this projects:
 1. Docker dev fashion:
    This option will run the project via air (Utility that detects code changes inside the container and restart the container)
    to run this option you should  enter the root project directory and run the following command:
-   ```
-   docker-compose -f docker-compose.dev.yaml up
-   ```
+   
+   `docker-compose -f docker-compose.dev.yaml up`
+   
    Final output and further logging will appear immediately on the screen 
    
 3. Docker production fashion:
    This option will let you run the project in a mild manner (Using debian slim and the container including only the output file and also the config (.env) and input texts files).
    In order to run this option you should enter the root project directory and run the following command:
-   ```
-   docker-compose up
-   ```
+   
+   `docker-compose up`
+   
     Final output and further logging will appear immediately on the screen
    
 5. Run the project locally
    For this option i can't guarantee the working directory will be retrieved correctly (Though using ```os.GetWd()```)
    In order to execute the project run the following commands:
-   ```
-   mv .env.example .env
-   go run cmd/main.go
-
-   ```  
+   
+```
+mv .env.example .env
+go run cmd/main.go
+```
 
 ## Architecture Overview
 
